@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="content">
+    <div class="subcontent">
+        <a href="/" class="btn btn-warning home">На главную</a>
+        <div class="counter" id="counter">{{ gol.counter }}</div>
+        <button class="btn btn-info refresh" id="refresh">Обновить</button>
+    </div>
+
+<table class="world" id="world">
+    {% for i in range(gol.world|length) %}
+    <tr>
+        {% for j in range(gol.world[0]|length) %}
+        {% if gol.world[i][j] == 1 %}
+        <td class="cell living-cell"></td>
+        {% elif gol.old_world[i][j] == 1 %}
+        <td class="cell dead-cell"></td>
+        {% else %}
+        <td class="cell"></td>
+        {% endif %}
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+</div>
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script>
+$(document).ready(function(){                            // по завершению загрузки страницы
+    $('#refresh').click(function(){                    // вешаем на клик по элементу с id = refresh
+        $.getJSON('/api', {}, function(json){  // загрузку JSON данных
+            let rows = '';
+            for (let i = 0; i < json.world.length; i++) {
+                rows += '<tr>';
+                for (let j = 0; j < json.world[0].length; j++) {
+                    if (json.world[i][j] == 1) {
+                        rows += '<td class="cell living-cell"></td>';
+                    } else if (json.old_world[i][j] == 1) {
+                        rows += '<td class="cell dead-cell"></td>';
+                    } else {
+                        rows += '<td class="cell"></td>';
+                    }
+                }
+                rows += '<tr>';
+            }
+            $('#world').html(rows);
+            $('#counter').html(json.counter)
+        });
+    });
+});
+
+</script>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+  <form action="/" method="post">
+     <p><div class="label"><label for="width">Width:</label></div>
+     <input type="number" id="width" placeholder="width" name="width" min="10" max="50" step="1" value="25"></p>
+     <p><div class="label"><label for="height">Height:</label></div>
+     <input type="number" id="height" placeholder="height" name="height"min="10" max="50" step="1" value="25"></p>
+     <p><button type="submit" class="btn btn-primary">Создать жизнь</button></p>
+  </form>
+{% endblock %}
